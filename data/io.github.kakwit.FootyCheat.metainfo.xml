@@ -25,7 +25,26 @@
     <color type="primary" scheme_preference="light">#e2080c</color>
     <color type="primary" scheme_preference="dark">#ff1e18</color>
   </branding>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source" width="1024" height="570">https://raw.githubusercontent.com/KAKwit/FootyCheat/main/data/screenshots/round.png</image>
+      <caption>The round, with the tip and each model's vote</caption>
+    </screenshot>
+    <screenshot>
+      <image type="source" width="1024" height="570">https://raw.githubusercontent.com/KAKwit/FootyCheat/main/data/screenshots/models.png</image>
+      <caption>Model records for a season, and games clear of the median</caption>
+    </screenshot>
+    <screenshot>
+      <image type="source" width="1024" height="570">https://raw.githubusercontent.com/KAKwit/FootyCheat/main/data/screenshots/ladder.png</image>
+      <caption>The ladder, with the finals line after eighth</caption>
+    </screenshot>
+  </screenshots>
   <releases>
+    <release version="0.1.3" date="2026-10-25">
+      <description>
+        <p>Round, Models, and Ladder screenshots are linked from the app listing.</p>
+      </description>
+    </release>
     <release version="0.1.2" date="2026-10-25">
       <description>
         <p>A version tag builds a Flatpak and attaches it to the GitHub release.</p>

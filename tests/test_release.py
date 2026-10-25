@@ -31,7 +31,11 @@ class ReleaseTests(unittest.TestCase):
         self.assertIn("<name>KAKwit</name>", metainfo)
         self.assertIn("https://github.com/KAKwit/FootyCheat", metainfo)
         self.assertIn(f'version="{__version__}"', metainfo)
-        self.assertNotIn("<screenshots>", metainfo)
+        self.assertIn("<screenshots>", metainfo)
+        for name in ("round.png", "models.png", "ladder.png"):
+            shot = _ROOT / "data" / "screenshots" / name
+            self.assertTrue(shot.is_file(), name)
+            self.assertIn(f"data/screenshots/{name}", metainfo)
         self.assertIn(f"id: {APP_ID}", manifest)
         self.assertIn('runtime-version: "51"', manifest)
         self.assertIn("--share=network", manifest)

@@ -68,7 +68,7 @@ flatpak-builder --user --install --force-clean build-dir io.github.kakwit.FootyC
 flatpak run io.github.kakwit.FootyCheat
 ```
 
-A tag named `v` plus the version, such as `v0.1.2`, runs that build on GitHub and attaches `io.github.kakwit.FootyCheat-x86_64.flatpak` to the release. Download the file and install it with:
+A tag named `v` plus the version, such as `v0.1.3`, runs that build on GitHub and attaches `io.github.kakwit.FootyCheat-x86_64.flatpak` to the release. Download the file and install it with:
 
 ```bash
 flatpak install --user io.github.kakwit.FootyCheat-x86_64.flatpak
@@ -76,7 +76,7 @@ flatpak install --user io.github.kakwit.FootyCheat-x86_64.flatpak
 
 Flathub has to be configured on that computer. The bundle contains the app, and Flatpak fetches the GNOME 51 runtime from Flathub. A push to `main` builds the same Flatpak and keeps the bundle as an Actions artifact.
 
-Flathub derives the repository from the application id, so the metainfo points at [KAKwit/FootyCheat](https://github.com/KAKwit/FootyCheat). Screenshots are not in the metainfo yet. Add them before submitting this to Flathub.
+Flathub derives the repository from the application id, so the metainfo points at [KAKwit/FootyCheat](https://github.com/KAKwit/FootyCheat). Round, Models, and Ladder screenshots are in `data/screenshots/` and linked from the metainfo. Software can load them once this repository is public.
 
 ## Tests
 
