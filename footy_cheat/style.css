@@ -1,0 +1,222 @@
+window.text-sm { font-size: 0.9286em; }
+window.text-lg { font-size: 1.1429em; }
+window.text-xl { font-size: 1.2857em; }
+
+.main-content {
+  padding-top: 10px;
+}
+
+.fixture-list,
+.record-list,
+.ladder-list {
+  padding: 0 20px 28px;
+}
+
+list.games,
+list.games:focus,
+list.games:focus-visible {
+  background: none;
+  outline: none;
+  box-shadow: none;
+}
+
+list.games > row,
+list.games > row:hover,
+list.games > row:focus,
+list.games > row:focus-visible,
+list.games > row:selected,
+list.games > row:selected:hover,
+list.games > row:selected:focus,
+list.games > row:selected:focus-visible {
+  min-height: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: none;
+  box-shadow: none;
+}
+
+.fixture-list {
+  padding-top: 13px;
+  padding-right: 23px;
+}
+
+.ladder-list {
+  padding-top: 20px;
+}
+
+.page-header {
+  padding: 0 20px 2px;
+}
+
+.day-heading {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.match {
+  background: @card_bg_color;
+  border: 1px solid @borders;
+  border-radius: 16px;
+  padding: 14px 16px;
+  /* 1px margin stands in for the second border pixel, so selecting a card
+     does not change its outer size. */
+  margin: 1px 1px 13px;
+}
+
+.match.selected {
+  border-width: 2px;
+  border-color: @accent_color;
+  background: alpha(@accent_bg_color, 0.08);
+  margin: 0 0 12px;
+}
+
+.score {
+  font-size: 28px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.figures {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.confidence {
+  color: @accent_color;
+  font-weight: 800;
+}
+
+.pill {
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.pill.good {
+  color: @success_color;
+  background: alpha(@success_color, 0.14);
+}
+
+.pill.bad {
+  color: @destructive_color;
+  background: alpha(@destructive_color, 0.14);
+}
+
+.pill.live {
+  color: @warning_color;
+  background: alpha(@warning_color, 0.14);
+}
+
+.pill.gold {
+  color: @accent_color;
+  background: alpha(@accent_bg_color, 0.14);
+}
+
+.pill.muted {
+  color: alpha(@window_fg_color, 0.70);
+  background: alpha(@window_fg_color, 0.08);
+}
+
+.mark.right {
+  color: @success_color;
+}
+
+.mark.wrong {
+  color: @destructive_color;
+}
+
+.form {
+  font-family: var(--monospace-font-family);
+}
+
+/* Letters are centered in the row, so 4px of bottom padding lifts them 2px
+   onto the same line as the proportional figures beside them. */
+.form-line {
+  padding-bottom: 4px;
+}
+
+/* P, Pts, % and W–L–D are right-aligned, so the gap before each of them is
+   the gutter plus the empty left side of that column. Form is left-aligned,
+   so it takes the same inset explicitly. */
+.form-column {
+  margin-left: 32px;
+}
+
+.form.W {
+  color: @success_color;
+  font-weight: 800;
+}
+
+.form.L {
+  color: @destructive_color;
+  font-weight: 800;
+}
+
+.form.D {
+  color: alpha(@window_fg_color, 0.70);
+  font-weight: 800;
+}
+
+.crest-fallback {
+  background: alpha(@window_fg_color, 0.12);
+  color: @window_fg_color;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.crest-fallback.large {
+  font-size: 20px;
+}
+
+.model-card,
+.ladder-card,
+.race-card {
+  background: @card_bg_color;
+  border: 1px solid @borders;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.model-card.footy {
+  border-color: alpha(@accent_bg_color, 0.7);
+  background: alpha(@accent_bg_color, 0.08);
+}
+
+.race-plot {
+  font-size: 12px;
+}
+
+progressbar.thin trough {
+  min-height: 6px;
+  border-radius: 99px;
+}
+
+row.danger-row label.title {
+  color: var(--destructive-color);
+}
+
+.count-pill {
+  background: alpha(@window_fg_color, 0.06);
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+
+.round-column {
+  min-width: 12.5rem;
+}
+
+.round-list {
+  padding: 8px 19px 8px 8px;
+}
+
+.round-list button {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.finals-line {
+  margin: 10px 8px 6px;
+}

@@ -1,0 +1,7 @@
+These PNG files are a cache of the club crests Squiggle publishes with its club list.
+They are here so Footy Cheat can draw a crest before that download has been stored.
+
+The crests are trademarks of the clubs. The GPL-3.0-or-later licence on the rest of
+Footy Cheat does not cover these files. Caching them follows Squiggle's request that
+clients keep a copy instead of asking again for the same data. A club that is not in
+this set is downloaded from Squiggle the next time the library updates.

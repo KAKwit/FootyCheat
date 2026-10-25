@@ -1,0 +1,1 @@
+"""Footy Cheat interface package."""

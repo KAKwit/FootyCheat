@@ -1,0 +1,32 @@
+[project]
+name = "footy-cheat"
+version = "0.1.0"
+description = "GNOME AFL tipping app. Keeps a local Squiggle library from the 2017 season onward."
+readme = "README.md"
+license = "GPL-3.0-or-later"
+requires-python = ">=3.11"
+
+[project.scripts]
+footy-cheat = "footy_cheat.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["footy_cheat*"]
+
+[tool.setuptools.package-data]
+footy_cheat = [
+  "style.css",
+  "assets/logos/*.png",
+  "assets/logos/NOTICE",
+  "assets/icons/hicolor/scalable/apps/*.svg",
+]
+
+[tool.setuptools.data-files]
+"share/applications" = ["data/io.github.kakwit.FootyCheat.desktop"]
+"share/metainfo" = ["data/io.github.kakwit.FootyCheat.metainfo.xml"]
+"share/icons/hicolor/scalable/apps" = [
+  "footy_cheat/assets/icons/hicolor/scalable/apps/io.github.kakwit.FootyCheat.svg",
+]
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Footy Cheat
+Comment=AFL tipping from a local Squiggle library
+Exec=footy-cheat
+Icon=io.github.kakwit.FootyCheat
+Terminal=false
+Type=Application
+Categories=Utility;Sports;
+Keywords=AFL;Football;Tipping;Squiggle;
+StartupNotify=true
+StartupWMClass=io.github.kakwit.FootyCheat
+SingleMainWindow=true

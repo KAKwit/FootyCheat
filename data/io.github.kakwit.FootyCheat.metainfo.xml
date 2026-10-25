@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.kakwit.FootyCheat</id>
+  <name>Footy Cheat</name>
+  <summary>AFL tipping from a local Squiggle library</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <developer id="io.github.kakwit">
+    <name>KAKwit</name>
+  </developer>
+  <description>
+    <p>
+      Footy Cheat keeps fixtures, results, ladders, and computer tips from the 2017 season onward on this computer, and tips each game from the majority of those models.
+    </p>
+    <p>
+      When the models are level, the side that states more confidence is the tip. Confidence is how often a vote of that strength has held. Live games update from Squiggle while they are on.
+    </p>
+  </description>
+  <launchable type="desktop-id">io.github.kakwit.FootyCheat.desktop</launchable>
+  <url type="homepage">https://github.com/KAKwit/FootyCheat</url>
+  <url type="bugtracker">https://github.com/KAKwit/FootyCheat/issues</url>
+  <url type="vcs-browser">https://github.com/KAKwit/FootyCheat</url>
+  <content_rating type="oars-1.1"/>
+  <branding>
+    <color type="primary" scheme_preference="light">#e2080c</color>
+    <color type="primary" scheme_preference="dark">#ff1e18</color>
+  </branding>
+  <releases>
+    <release version="0.1.0" date="2026-10-25">
+      <description>
+        <p>
+          First release. Tips each game from the majority of Squiggle's models, using a library kept on this computer from the 2017 season onward.
+        </p>
+      </description>
+    </release>
+  </releases>
+</component>
