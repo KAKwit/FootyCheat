@@ -26,6 +26,11 @@
     <color type="primary" scheme_preference="dark">#ff1e18</color>
   </branding>
   <releases>
+    <release version="0.1.2" date="2026-10-25">
+      <description>
+        <p>A version tag builds a Flatpak and attaches it to the GitHub release.</p>
+      </description>
+    </release>
     <release version="0.1.1" date="2026-10-25">
       <description>
         <p>The library lives only in this app's own data directory.</p>

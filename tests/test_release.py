@@ -40,6 +40,12 @@ class ReleaseTests(unittest.TestCase):
         self.assertIn(f'version = "{__version__}"', project)
         self.assertIn(f"data/{APP_ID}.desktop", project)
         self.assertIn(f"data/{APP_ID}.metainfo.xml", project)
+        workflow = (_ROOT / ".github" / "workflows" / "flatpak.yml").read_text()
+        self.assertIn(f"{APP_ID}.yml", workflow)
+        self.assertIn("gnome-51", workflow)
+        self.assertIn(f"{APP_ID}-x86_64.flatpak", workflow)
+        self.assertIn("refs/tags/v", workflow)
+        self.assertIn("contents: write", workflow)
 
     def test_the_shipped_crests_are_the_current_eighteen_clubs(self):
         logo_dir = _ROOT / "footy_cheat" / "assets" / "logos"

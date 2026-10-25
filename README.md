@@ -68,7 +68,15 @@ flatpak-builder --user --install --force-clean build-dir io.github.kakwit.FootyC
 flatpak run io.github.kakwit.FootyCheat
 ```
 
-Flathub derives the repository from that id, so the metainfo points at [KAKwit/FootyCheat](https://github.com/KAKwit/FootyCheat). That repository is not published yet. Screenshots are not in the metainfo yet. Add them before submitting this to Flathub.
+A tag named `v` plus the version, such as `v0.1.2`, runs that build on GitHub and attaches `io.github.kakwit.FootyCheat-x86_64.flatpak` to the release. Download the file and install it with:
+
+```bash
+flatpak install --user io.github.kakwit.FootyCheat-x86_64.flatpak
+```
+
+Flathub has to be configured on that computer. The bundle contains the app, and Flatpak fetches the GNOME 51 runtime from Flathub. A push to `main` builds the same Flatpak and keeps the bundle as an Actions artifact.
+
+Flathub derives the repository from the application id, so the metainfo points at [KAKwit/FootyCheat](https://github.com/KAKwit/FootyCheat). Screenshots are not in the metainfo yet. Add them before submitting this to Flathub.
 
 ## Tests
 
