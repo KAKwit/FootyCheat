@@ -1,0 +1,15 @@
+---
+description: Bump the patch version on every change
+alwaysApply: true
+---
+
+# Version
+
+Every change that is committed bumps the last number of the version: `0.1.1` becomes `0.1.2`.
+
+Keep these three in step with `footy_cheat/__init__.py`:
+
+- `pyproject.toml` `version`
+- a new `<release>` at the top of `data/io.github.kakwit.FootyCheat.metainfo.xml`, dated today, leaving older releases in place
+
+Leave the first two numbers alone unless asked.

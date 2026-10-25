@@ -21,7 +21,7 @@ pip install .
 footy-cheat
 ```
 
-The database is created at `~/.local/share/footy-cheat/footy.db`. That file is separate from the Flutter app's library.
+The database is created at `~/.local/share/footy-cheat/footy.db`.
 
 The first launch downloads every Squiggle season from 2017 onward, one request at a time, with a progress screen. Later launches refresh the current season when the copy is more than 15 minutes old during the season, or check once a day for next year's fixture when the season is over. Use Update now in the header or in Preferences to refresh immediately. The button’s tooltip says when the library was last synced, and on a narrow window that time also sits beside the button. Download again replaces the local copy from 2017 onward, after a confirmation. Stop takes effect between requests; what has already been saved is kept.
 

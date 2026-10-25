@@ -1,7 +1,7 @@
 import unittest
 from pathlib import Path
 
-from footy_cheat import APP_ID
+from footy_cheat import APP_ID, __version__
 
 _ROOT = Path(__file__).resolve().parents[1]
 
@@ -30,13 +30,14 @@ class ReleaseTests(unittest.TestCase):
         self.assertIn(f'<developer id="{developer}">', metainfo)
         self.assertIn("<name>KAKwit</name>", metainfo)
         self.assertIn("https://github.com/KAKwit/FootyCheat", metainfo)
-        self.assertIn('version="0.1.0"', metainfo)
+        self.assertIn(f'version="{__version__}"', metainfo)
         self.assertNotIn("<screenshots>", metainfo)
         self.assertIn(f"id: {APP_ID}", manifest)
         self.assertIn('runtime-version: "51"', manifest)
         self.assertIn("--share=network", manifest)
         self.assertTrue(icon.is_file())
         project = (_ROOT / "pyproject.toml").read_text()
+        self.assertIn(f'version = "{__version__}"', project)
         self.assertIn(f"data/{APP_ID}.desktop", project)
         self.assertIn(f"data/{APP_ID}.metainfo.xml", project)
 
