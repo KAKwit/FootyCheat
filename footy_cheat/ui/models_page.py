@@ -13,7 +13,16 @@ from ..engine.model import sort_models
 from ..engine.numbers import to_fixed
 from ..format import format_clear, format_percent
 from ..theme import accent_for
-from .widgets import PageHeader, YearMenu, clear, empty_pane, label, pill, scrolled
+from .widgets import (
+    PageHeader,
+    YearMenu,
+    content_stack,
+    empty_pane,
+    label,
+    pill,
+    scrolled,
+    show_crossfade,
+)
 
 # Kept away from Adwaita's default blue so a second leader stays readable.
 _LEADER_EXTRAS = (
@@ -54,13 +63,14 @@ class ModelsPage(Gtk.Box):
         note.set_margin_end(20)
         note.set_margin_top(12)
         note.set_margin_bottom(12)
-        self.host = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
-        self.host.add_css_class("record-list")
+        self.stack = content_stack()
         self.append(self.header)
         self.append(self.group)
         self.append(note)
-        self.append(scrolled(self.host))
+        self.append(scrolled(self.stack))
         self._guard = False
+        self._year = None
+        self._shown_sort = None
 
     def _sorted(self, *_args) -> None:
         if self._guard:
@@ -83,10 +93,16 @@ class ModelsPage(Gtk.Box):
         else:
             subtitle = f"{len(rows)} models"
         self.header.set_heading("Model record", subtitle)
-        clear(self.host)
+        navigate = self._year is not None and (
+            self._year != controller.year or self._shown_sort != self.sort
+        )
+        self._year = controller.year
+        self._shown_sort = self.sort
+        host = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        host.add_css_class("record-list")
         if board is None or not rows:
             if board is None:
-                self.host.append(
+                host.append(
                     empty_pane(
                         "applications-science-symbolic",
                         "No model record",
@@ -94,22 +110,24 @@ class ModelsPage(Gtk.Box):
                     )
                 )
             else:
-                self.host.append(
+                host.append(
                     empty_pane(
                         "applications-science-symbolic",
                         "No settled tips",
                         "No model has a result in this season yet.",
                     )
                 )
+            show_crossfade(self.stack, host, animate=navigate)
             return
         team_id = _team_theme(controller)
         scale = _clear_scale(rows, board.footy)
         if len(board.rounds) >= 2 and any(len(line.points) >= 2 for line in board.lines):
-            self.host.append(RaceChart(board, team_id))
+            host.append(RaceChart(board, team_id))
         if board.footy is not None and board.footy.tips > 0:
-            self.host.append(self._card(board.footy, None, scale, team_id, pinned=True))
+            host.append(self._card(board.footy, None, scale, team_id, pinned=True))
         for index, row in enumerate(rows, start=1):
-            self.host.append(self._card(row, index, scale, team_id))
+            host.append(self._card(row, index, scale, team_id))
+        show_crossfade(self.stack, host, animate=navigate)
 
     def _card(self, row, rank: int | None, scale: float, team_id: int | None, pinned: bool = False):
         card = Gtk.Box(spacing=12)

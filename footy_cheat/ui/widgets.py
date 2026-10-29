@@ -10,12 +10,52 @@ from gi.repository import Gdk, GLib, Gtk, Pango
 from ..format import format_afl_day, format_kickoff
 
 
+_CROSSFADE_MS = 200
+
+
 def clear(widget: Gtk.Widget) -> None:
     child = widget.get_first_child()
     while child is not None:
         nxt = child.get_next_sibling()
         widget.remove(child)
         child = nxt
+
+
+def content_stack() -> Gtk.Stack:
+    """Stack used to crossfade whole page bodies."""
+    stack = Gtk.Stack()
+    stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
+    stack.set_transition_duration(_CROSSFADE_MS)
+    stack.set_vexpand(True)
+    return stack
+
+
+def show_crossfade(stack: Gtk.Stack, child: Gtk.Widget, *, animate: bool = True) -> None:
+    """Swap stack content, optionally with a short Adwaita-style crossfade."""
+    duration = stack.get_transition_duration()
+    if not animate:
+        stack.set_transition_duration(0)
+    current = stack.get_visible_child_name()
+    nxt = "b" if current == "a" else "a"
+    existing = stack.get_child_by_name(nxt)
+    if existing is not None:
+        stack.remove(existing)
+    stack.add_named(child, nxt)
+    stack.set_visible_child(child)
+    prev = stack.get_child_by_name("a" if nxt == "b" else "b")
+    if prev is not None:
+        if animate and duration > 0:
+            GLib.timeout_add(duration + 30, _drop_hidden, stack, prev)
+        else:
+            stack.remove(prev)
+    if not animate:
+        stack.set_transition_duration(duration)
+
+
+def _drop_hidden(stack: Gtk.Stack, child: Gtk.Widget) -> bool:
+    if child.get_parent() is stack and stack.get_visible_child() is not child:
+        stack.remove(child)
+    return False
 
 
 def label(

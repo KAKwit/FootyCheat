@@ -1,6 +1,6 @@
 [project]
 name = "footy-cheat"
-version = "0.1.4"
+version = "0.1.5"
 description = "GNOME AFL tipping app. Keeps a local Squiggle library from the 2017 season onward."
 readme = "README.md"
 license = "GPL-3.0-or-later"

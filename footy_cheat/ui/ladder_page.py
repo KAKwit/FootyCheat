@@ -6,7 +6,16 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, GLib, Gtk
 
 from ..format import points_percent
-from .widgets import Crests, PageHeader, YearMenu, empty_pane, label, scrolled
+from .widgets import (
+    Crests,
+    PageHeader,
+    YearMenu,
+    content_stack,
+    empty_pane,
+    label,
+    scrolled,
+    show_crossfade,
+)
 
 
 class LadderPage(Gtk.Box):
@@ -17,6 +26,7 @@ class LadderPage(Gtk.Box):
         self._narrow = True
         self._form = False
         self._sig = None
+        self._year = None
         self._queued = False
         self.header = PageHeader()
         self.years = YearMenu(controller.choose_year)
@@ -24,7 +34,8 @@ class LadderPage(Gtk.Box):
         self.bin = Adw.BreakpointBin()
         self.bin.set_vexpand(True)
         self.bin.set_size_request(1, 1)
-        self.bin.set_child(Gtk.Box())
+        self.stack = content_stack()
+        self.bin.set_child(self.stack)
         for condition in ("min-width: 760px", "min-width: 980px"):
             point = Adw.Breakpoint.new(Adw.BreakpointCondition.parse(condition))
             point.connect("apply", self._sync_layout)
@@ -84,14 +95,18 @@ class LadderPage(Gtk.Box):
         )
         if signature == self._sig:
             return
+        navigate = self._year is not None and self._year != controller.year
+        self._year = controller.year
         self._sig = signature
         if not rows:
-            self.bin.set_child(
+            show_crossfade(
+                self.stack,
                 empty_pane(
                     "view-list-symbolic",
                     "No ladder yet",
                     "No ladder is stored for this season yet.",
-                )
+                ),
+                animate=navigate,
             )
             return
         body = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
@@ -105,7 +120,7 @@ class LadderPage(Gtk.Box):
                 body.append(self._card(row, teams))
             else:
                 body.append(self._line(row, teams))
-        self.bin.set_child(scrolled(body))
+        show_crossfade(self.stack, scrolled(body), animate=navigate)
 
     def _head(self) -> Gtk.Widget:
         row = Gtk.Box(spacing=8)

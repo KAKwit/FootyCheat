@@ -46,6 +46,7 @@ class FootyWindow(Adw.ApplicationWindow):
         self.refresh_button.add_css_class("flat")
         self.refresh_button.set_tooltip_text("Update now")
         self.refresh_button.connect("clicked", lambda *_: controller.refresh_now())
+        self._refresh_busy = False
         self.synced = label("Not synced yet", "dim-label", "caption", ellipsize=True)
         self.synced.set_max_width_chars(28)
         self.synced.set_valign(Gtk.Align.CENTER)
@@ -87,12 +88,16 @@ class FootyWindow(Adw.ApplicationWindow):
 
         self.import_page = ImportPage(controller)
         self.opening = Adw.StatusPage(
-            icon_name="applications-games-symbolic",
             title="Opening the library",
             description="Reading the games stored on this computer.",
         )
+        self.opening_spinner = Adw.Spinner()
+        self.opening_spinner.set_size_request(48, 48)
+        self.opening.set_child(self.opening_spinner)
         self.outer = Gtk.Stack()
         self.outer.add_css_class("main-content")
+        self.outer.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
+        self.outer.set_transition_duration(200)
         self.outer.set_vexpand(True)
         self.outer.add_named(self.opening, "opening")
         self.outer.add_named(self.import_page, "import")
@@ -202,10 +207,12 @@ class FootyWindow(Adw.ApplicationWindow):
         synced = synced_label(None if status is None else status.last_sync)
         self.synced.set_label(controller.busy or synced)
         self.synced.set_tooltip_text(synced)
+        busy = bool(controller.busy)
         if controller.busy:
             self.refresh_button.set_tooltip_text(f"{controller.busy}. {synced}")
         else:
             self.refresh_button.set_tooltip_text(f"Update now. {synced}")
+        self._set_refresh_busy(busy and not controller.importing)
         notice = controller.notice
         if notice:
             controller.notice = None
@@ -228,6 +235,14 @@ class FootyWindow(Adw.ApplicationWindow):
             self.opening.set_description(
                 controller.error or "Reading the games stored on this computer."
             )
+            if failed:
+                if self.opening.get_child() is not None:
+                    self.opening.set_child(None)
+                self.opening.set_icon_name("dialog-error-symbolic")
+            else:
+                self.opening.set_icon_name("")
+                if self.opening.get_child() is not self.opening_spinner:
+                    self.opening.set_child(self.opening_spinner)
             self.error_banner.set_revealed(False)
         else:
             self.outer.set_visible_child_name("pages")
@@ -237,6 +252,18 @@ class FootyWindow(Adw.ApplicationWindow):
             self.error_banner.set_revealed(show_error)
         if self.preferences.get_mapped():
             self.preferences.update()
+
+    def _set_refresh_busy(self, busy: bool) -> None:
+        if busy == self._refresh_busy:
+            return
+        self._refresh_busy = busy
+        if busy:
+            image = Gtk.Image()
+            image.set_pixel_size(16)
+            image.set_from_paintable(Adw.SpinnerPaintable.new(image))
+            self.refresh_button.set_child(image)
+        else:
+            self.refresh_button.set_icon_name("view-refresh-symbolic")
 
     def apply_theme(self) -> None:
         if self._theming:

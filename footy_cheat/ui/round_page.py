@@ -17,7 +17,7 @@ from .widgets import (
     PageHeader,
     YearMenu,
     centre_line,
-    clear,
+    content_stack,
     empty_pane,
     grouped_days,
     label,
@@ -26,6 +26,7 @@ from .widgets import (
     pin_viewports,
     ribbon,
     scrolled,
+    show_crossfade,
 )
 
 
@@ -54,6 +55,7 @@ class RoundPage(Gtk.Box):
         self._selecting = False
         self._inline_tip: Gtk.Widget | None = None
         self._inspector_host: Gtk.Box | None = None
+        self._inspector_stack: Gtk.Stack | None = None
         self._tips_inline = True
         self.header = PageHeader()
         self.prev = Gtk.Button(icon_name="go-previous-symbolic")
@@ -71,7 +73,8 @@ class RoundPage(Gtk.Box):
         self.bin = Adw.BreakpointBin()
         self.bin.set_vexpand(True)
         self.bin.set_size_request(1, 1)
-        self.bin.set_child(Gtk.Box())
+        self.stack = content_stack()
+        self.bin.set_child(self.stack)
         for condition in ("min-width: 560px", "min-width: 860px", "min-width: 1120px"):
             point = Adw.Breakpoint.new(Adw.BreakpointCondition.parse(condition))
             point.connect("apply", self._sync_layout)
@@ -132,6 +135,7 @@ class RoundPage(Gtk.Box):
             return
         same_round = self._round_key == (controller.year, controller.round)
         same_year = self._round_key is not None and self._round_key[0] == controller.year
+        navigate = self._round_key is not None and not same_round
         self._round_key = (controller.year, controller.round)
         scroll_value = _scroll_value(self._scroll) if same_round else 0.0
         round_value = _scroll_value(self._round_scroll) if same_year else 0.0
@@ -144,7 +148,8 @@ class RoundPage(Gtk.Box):
         self._rows = {}
         self._inline_tip = None
         self._inspector_host = None
-        self.bin.set_child(self._body())
+        self._inspector_stack = None
+        show_crossfade(self.stack, self._body(), animate=navigate)
         self._retarget()
         if self._scroll is not None and same_round:
             GLib.idle_add(self._restore, self._scroll, scroll_value, 0)
@@ -245,8 +250,13 @@ class RoundPage(Gtk.Box):
             and selected in self._cards
         ):
             tip = self._tip_body(game)
-            self._cards[selected].append(tip)
-            self._inline_tip = tip
+            reveal = Gtk.Revealer()
+            reveal.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN)
+            reveal.set_transition_duration(180)
+            reveal.set_child(tip)
+            self._cards[selected].append(reveal)
+            self._inline_tip = reveal
+            GLib.idle_add(reveal.set_reveal_child, True)
         row = None if selected is None else self._rows.get(selected)
         if self._list is not None:
             current = self._list.get_selected_row()
@@ -257,18 +267,19 @@ class RoundPage(Gtk.Box):
                 else:
                     self._list.select_row(row)
                 self._selecting = False
-        if self._inspector_host is not None:
-            clear(self._inspector_host)
+        if self._inspector_stack is not None:
             if game is not None and game.call is not None:
                 inspector = scrolled(self._tip_inspector(game))
                 inspector.set_propagate_natural_width(False)
-                self._inspector_host.append(inspector)
+                body = inspector
             else:
                 note = label("No model tips for this game", "dim-label", wrap=True)
                 note.set_margin_top(18)
                 note.set_margin_start(16)
                 note.set_margin_end(18)
-                self._inspector_host.append(note)
+                body = note
+            prior = self._inspector_stack.get_visible_child() is not None
+            show_crossfade(self._inspector_stack, body, animate=prior)
         if anchor is not None:
             GLib.idle_add(self._restore_anchor, anchor[0], anchor[1], 0, None)
 
@@ -399,9 +410,9 @@ class RoundPage(Gtk.Box):
             pane.set_vexpand(True)
             pane.set_size_request(_TIP_MIN, -1)
             pane.add_css_class("inspector-column")
-            self._inspector_host = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            self._inspector_host.set_vexpand(True)
-            pane.append(self._inspector_host)
+            self._inspector_stack = content_stack()
+            self._inspector_host = self._inspector_stack
+            pane.append(self._inspector_stack)
             return _TipSplit(side, board, pane)
         row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         row.append(side)
