@@ -123,9 +123,12 @@ class FootyWindow(Adw.ApplicationWindow):
         keys.connect("key-pressed", self._key)
         self.add_controller(keys)
         self.connect("close-request", self._close)
-        Adw.StyleManager.get_default().connect("notify::dark", lambda *_: self.apply_theme())
+        style = Adw.StyleManager.get_default()
+        style.connect("notify::dark", lambda *_: self.apply_theme())
+        style.connect("notify::accent-color", lambda *_: self.apply_theme())
         controller.add_listener(self.refresh)
         self.refresh()
+
 
     def _install_style(self, icon_dir: Path, css_path: Path) -> None:
         display = Gdk.Display.get_default()

@@ -40,6 +40,13 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.1.4" date="2026-10-29">
+      <description>
+        <p>
+          Model cards align without a rank number, chart leaders stay distinct, and no club keeps the system accent. The README shows the logo and Round, Ladder, and Models screenshots.
+        </p>
+      </description>
+    </release>
     <release version="0.1.3" date="2026-10-25">
       <description>
         <p>Round, Models, and Ladder screenshots are linked from the app listing.</p>

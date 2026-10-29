@@ -1,6 +1,16 @@
+<p align="center">
+  <img src="footy_cheat/assets/icons/hicolor/scalable/apps/io.github.kakwit.FootyCheat.svg" alt="Footy Cheat" width="128" height="128">
+</p>
+
 # Footy Cheat
 
 GNOME AFL tipping app. It keeps a local copy of the public [Squiggle API](https://api.squiggle.com.au/) and rates the computer models against the results. The window is a GTK 4 and libadwaita application. The tip on each game is the majority of the models.
+
+<p align="center">
+  <a href="data/screenshots/round.png"><img src="data/screenshots/round.png" alt="Round" width="280"></a>
+  <a href="data/screenshots/ladder.png"><img src="data/screenshots/ladder.png" alt="Ladder" width="280"></a>
+  <a href="data/screenshots/models.png"><img src="data/screenshots/models.png" alt="Models" width="280"></a>
+</p>
 
 ## Requirements
 

@@ -17,6 +17,11 @@ def _contrast(left: float, right: float) -> float:
 
 
 class ThemeTests(unittest.TestCase):
+    def test_no_club_leaves_the_system_accent_alone(self):
+        self.assertIsNone(accent_for(None))
+        self.assertEqual(accent_css(None, False), "")
+        self.assertEqual(accent_css(None, True), "")
+
     def test_a_bright_club_is_darkened_for_text_on_a_light_window(self):
         fill, _on_fill = accent_for(8)
         self.assertEqual(fill, "#FFC20E")

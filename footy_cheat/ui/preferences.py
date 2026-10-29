@@ -58,7 +58,10 @@ class PreferencesDialog(Adw.PreferencesDialog):
         appearance.add(self.size_row)
         self.club_group = Adw.PreferencesGroup(
             title="Club colours",
-            description="The accent follows the club you support. Scores and text stay easy to read.",
+            description=(
+                "System follows this computer's accent. Pick a club to use its colours instead. "
+                "Scores and text stay easy to read."
+            ),
         )
         page.add(appearance)
         page.add(self.club_group)
@@ -165,7 +168,7 @@ class PreferencesDialog(Adw.PreferencesDialog):
             for row, _team_id, _check in self._club_rows:
                 self.club_group.remove(row)
             self._club_rows.clear()
-            self._add_club("Default", None, teams)
+            self._add_club("System", None, teams)
             for team_id, (name, _wash, _gold) in CLUBS.items():
                 label_name = name
                 for team in teams:

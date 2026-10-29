@@ -15,10 +15,11 @@ from ..format import format_clear, format_percent
 from ..theme import accent_for
 from .widgets import PageHeader, YearMenu, clear, empty_pane, label, pill, scrolled
 
+# Kept away from Adwaita's default blue so a second leader stays readable.
 _LEADER_EXTRAS = (
-    (0.22, 0.48, 0.75, 1.0),
     (0.82, 0.45, 0.12, 1.0),
-    (0.45, 0.38, 0.62, 1.0),
+    (0.18, 0.68, 0.58, 1.0),
+    (0.62, 0.38, 0.72, 1.0),
 )
 
 
@@ -115,8 +116,7 @@ class ModelsPage(Gtk.Box):
         card.add_css_class("model-card")
         if pinned:
             card.add_css_class("footy")
-        if rank is not None:
-            card.append(label(str(rank), "dim-label", "figures"))
+        card.append(_rank_label(rank))
         text = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         text.set_hexpand(True)
         title = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
@@ -133,13 +133,9 @@ class ModelsPage(Gtk.Box):
         ahead.set_width_chars(6)
         bar_row.append(ahead)
         text.append(bar_row)
-        wrap = Gtk.FlowBox()
-        wrap.set_selection_mode(Gtk.SelectionMode.NONE)
-        wrap.set_max_children_per_line(5)
-        wrap.set_column_spacing(14)
-        wrap.set_row_spacing(4)
+        wrap = Gtk.Box(spacing=14)
         for title_text, value in _stats(row):
-            wrap.insert(_mini(title_text, value), -1)
+            wrap.append(_mini(title_text, value))
         text.append(wrap)
         card.append(text)
         hero, caption = _hero(row, self.sort)
@@ -238,13 +234,9 @@ class RaceChart(Gtk.Box):
         self.append(area)
 
     def _legend(self) -> Gtk.Widget:
-        box = Gtk.FlowBox()
-        box.set_selection_mode(Gtk.SelectionMode.NONE)
-        box.set_max_children_per_line(4)
-        box.set_column_spacing(14)
-        box.set_row_spacing(4)
+        box = Gtk.Box(spacing=14)
         box.set_halign(Gtk.Align.START)
-        box.insert(self._chip("field", 0, "Field"), -1)
+        box.append(self._chip("field", 0, "Field"))
         named = [line for line in self.board.lines if line.points and line.role == "footy"]
         named.extend(line for line in self.board.lines if line.points and line.role != "footy")
         leader_index = 0
@@ -254,7 +246,7 @@ class RaceChart(Gtk.Box):
                 index = leader_index
                 leader_index += 1
             text = f"{line.name}  {format_clear(line.points[-1])}"
-            box.insert(self._chip(line.role, index, text), -1)
+            box.append(self._chip(line.role, index, text))
         return box
 
     def _chip(self, kind: str, leader_index: int, text: str) -> Gtk.Widget:
@@ -461,10 +453,33 @@ def series_color(kind: str, leader_index: int, team_id: int | None) -> tuple[flo
         return (0.55, 0.56, 0.6, 0.95) if dark else (0.35, 0.36, 0.4, 0.9)
     if kind == "footy":
         return (0.94, 0.95, 0.96, 1.0) if dark else (0.12, 0.13, 0.15, 1.0)
+    primary = _leader_primary(team_id)
     if leader_index <= 0:
-        red, green, blue = _rgb(accent_for(team_id)[0])
-        return red, green, blue, 1.0
-    return _LEADER_EXTRAS[min(leader_index - 1, len(_LEADER_EXTRAS) - 1)]
+        return primary
+    return _distinct_leader(primary, leader_index)
+
+
+def _leader_primary(team_id: int | None) -> tuple[float, float, float, float]:
+    colors = accent_for(team_id)
+    if colors is None:
+        rgba = Adw.StyleManager.get_default().get_accent_color_rgba()
+        return rgba.red, rgba.green, rgba.blue, 1.0
+    red, green, blue = _rgb(colors[0])
+    return red, green, blue, 1.0
+
+
+def _distinct_leader(
+    primary: tuple[float, float, float, float], leader_index: int
+) -> tuple[float, float, float, float]:
+    ranked = sorted(_LEADER_EXTRAS, key=lambda color: -_color_distance(primary, color))
+    return ranked[min(leader_index - 1, len(ranked) - 1)]
+
+
+def _color_distance(
+    left: tuple[float, float, float, float], right: tuple[float, float, float, float]
+) -> float:
+    return sum((a - b) ** 2 for a, b in zip(left[:3], right[:3]))
+
 
 
 def _ink() -> tuple[float, float, float, float]:
@@ -541,6 +556,14 @@ def _badge(text: str) -> Gtk.Widget:
     badge = pill(text, "gold")
     badge.set_valign(Gtk.Align.CENTER)
     return badge
+
+
+def _rank_label(rank: int | None) -> Gtk.Widget:
+    widget = label("" if rank is None else str(rank), "dim-label", "figures")
+    widget.set_width_chars(2)
+    widget.set_xalign(1)
+    widget.set_valign(Gtk.Align.START)
+    return widget
 
 
 def _mini(title: str, value: str) -> Gtk.Widget:

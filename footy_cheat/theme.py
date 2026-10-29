@@ -37,9 +37,14 @@ def luminance(color: str) -> float:
     return 0.2126 * red + 0.7152 * green + 0.0722 * blue
 
 
-def accent_for(team_id: int | None) -> tuple[str, str]:
-    """Club fill colour, and a foreground that can sit on that fill."""
-    fill = "#E2B340" if team_id is None or team_id not in CLUBS else CLUBS[team_id][2]
+def accent_for(team_id: int | None) -> tuple[str, str] | None:
+    """Club fill colour and a foreground for that fill.
+
+    Returns None when no club is chosen so Adwaita can keep the system accent.
+    """
+    if team_id is None or team_id not in CLUBS:
+        return None
+    fill = CLUBS[team_id][2]
     on_fill = "#1A1406" if luminance(fill) > 0.42 else "#FFFFFF"
     return fill, on_fill
 
@@ -56,7 +61,10 @@ def readable_on_window(color: str, dark: bool) -> str:
 
 
 def accent_css(team_id: int | None, dark: bool) -> str:
-    fill, on_fill = accent_for(team_id)
+    colors = accent_for(team_id)
+    if colors is None:
+        return ""
+    fill, on_fill = colors
     text = readable_on_window(fill, dark)
     return f"""
     @define-color accent_color {text};

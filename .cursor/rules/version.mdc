@@ -1,11 +1,13 @@
 ---
-description: Bump the patch version on every change
+description: When committing, bump the patch version in lockstep
 alwaysApply: true
 ---
 
 # Version
 
-Every change that is committed bumps the last number of the version: `0.1.1` becomes `0.1.2`.
+Only bump the version when the user asks you to commit. Do not bump it as part of ordinary code changes.
+
+When committing, bump the last number of the version: `0.1.1` becomes `0.1.2`.
 
 Keep these three in step with `footy_cheat/__init__.py`:
 
