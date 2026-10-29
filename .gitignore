@@ -6,3 +6,6 @@ __pycache__/
 dist/
 build/
 .flatpak-builder/
+
+# Local Cursor config (not shared)
+.cursor/
