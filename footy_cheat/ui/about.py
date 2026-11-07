@@ -17,6 +17,8 @@ def present_about(parent: Gtk.Widget) -> None:
         version=__version__,
         copyright="© 2026 KAKwit",
         license_type=Gtk.License.GPL_3_0,
+        website="https://github.com/KAKwit/FootyCheat",
+        issue_url="https://github.com/KAKwit/FootyCheat/issues",
         comments=(
             f"Footy Cheat keeps fixtures, results, ladders, and computer tips on this computer, "
             f"from the {FIRST_SEASON_YEAR} season onward. Earlier seasons are not part of the record.\n\n"

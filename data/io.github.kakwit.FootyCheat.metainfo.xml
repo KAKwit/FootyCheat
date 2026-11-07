@@ -40,6 +40,15 @@
     </screenshot>
   </screenshots>
   <releases>
+    <release version="0.1.6" date="2026-11-07">
+      <description>
+        <p>
+          About links to the website and issue tracker. Rebuild so Software
+          picks up the Round, Models, and Ladder screenshots from composed
+          app-info while those image URLs are public.
+        </p>
+      </description>
+    </release>
     <release version="0.1.5" date="2026-10-29">
       <description>
         <p>

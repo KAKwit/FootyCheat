@@ -32,10 +32,22 @@ class ReleaseTests(unittest.TestCase):
         self.assertIn("https://github.com/KAKwit/FootyCheat", metainfo)
         self.assertIn(f'version="{__version__}"', metainfo)
         self.assertIn("<screenshots>", metainfo)
+        self.assertIn('<url type="homepage">https://github.com/KAKwit/FootyCheat</url>', metainfo)
+        self.assertIn(
+            '<url type="bugtracker">https://github.com/KAKwit/FootyCheat/issues</url>',
+            metainfo,
+        )
         for name in ("round.png", "models.png", "ladder.png"):
             shot = _ROOT / "data" / "screenshots" / name
             self.assertTrue(shot.is_file(), name)
             self.assertIn(f"data/screenshots/{name}", metainfo)
+            self.assertIn(
+                f"https://raw.githubusercontent.com/KAKwit/FootyCheat/main/data/screenshots/{name}",
+                metainfo,
+            )
+        about = (_ROOT / "footy_cheat" / "ui" / "about.py").read_text()
+        self.assertIn('website="https://github.com/KAKwit/FootyCheat"', about)
+        self.assertIn('issue_url="https://github.com/KAKwit/FootyCheat/issues"', about)
         self.assertIn(f"id: {APP_ID}", manifest)
         self.assertIn('runtime-version: "51"', manifest)
         self.assertIn("--share=network", manifest)
